@@ -325,6 +325,7 @@ class AnalyzeWaterfall:
             raise Exception('First particles must be labelled')
 
         calibration = self.meta.get('calibration', 440E-9)  # m/px uses a default value in case it was not defined
+        self.metadata.update({'pixel calibration (m/px)': calibration})
         print(f'Using {calibration}m/px as calibration')
 
         self.pcle_data = {}
@@ -484,12 +485,12 @@ class AnalyzeWaterfall:
         self.contextual_data = {
             'last_export_folder': str(filename)
             }
-        data = {p: [pp.get('D')[0], pp.get('mean_intensity'), pp.get('r'), pp.get('intensity_std')]
+        data = {p: [pp.get('D')[0], 1E9 * 2 * pp.get('r', np.nan), pp.get('mean_intensity'), pp.get('intensity_std')]
                 for p, pp in self.pcle_data.items()}
 
-        data_df = pd.DataFrame.from_dict(data, orient='index', columns=['Diffusion coefficient',
+        data_df = pd.DataFrame.from_dict(data, orient='index', columns=['Diffusion coefficient (m^2/s ?)',
+                                                                        'Diameter (nm)',
                                                                         'Intensity',
-                                                                        'Diameter',
                                                                         'Intensity standard deviation'])
         data_df.to_csv(filename)
 
