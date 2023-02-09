@@ -358,7 +358,9 @@ class AnalyzeWaterfall:
                 # If there is no justification for that offset, fitting a straight line through (0,0) seems more sensible:
                 # slope, _, _, _ = np.linalg.lstsq(lagtimes[:, np.newaxis], MSD['MSD'].array[:len(lagtimes)])
 
-                print(type(lagtimes))
+                if type(fit) != np.array:
+                    print('>>>>>>>>>>> fit type:', type(fit))
+
                 model = lambda slope: lagtimes*slope
                 residual = lambda slope: MSD['MSD'].array[:len(lagtimes)] - model(slope)
                 slope = least_squares(residual, [MSD['MSD'].array[:len(lagtimes)][-1]/lagtimes[-1]])
@@ -433,6 +435,13 @@ class AnalyzeWaterfall:
             #     self.pcle_data[p].update({'r_only_linear_30': r})
             # except:
             #     print(f'Problem with pcle {p}')
+
+        # Remove particles where the fit failed
+
+        labels_of_failed_fits = [p for p, pp in self.pcle_data.items() if pp['D'] is np.nan]
+        for p in labels_of_failed_fits:
+            print(f'removing particle {p}, because the fit failed')
+            del self.pcle_data[p]
 
     def save_particle_label(self, data, metadata, particle_num):
         if self.mask is not None:
