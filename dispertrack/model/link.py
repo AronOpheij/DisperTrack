@@ -24,7 +24,7 @@ def link_frames(frames, radius, memory=20, initial_drift=0):
     """ Link the particles in all the frames, using the specified radius.
     """
 
-    frames['particle'] = pd.Series(np.nan*np.ones(len(frames), dtype=np.int), index=frames.index, dtype=np.int)
+    frames['particle'] = pd.Series(np.nan*np.ones(len(frames), dtype=int), index=frames.index, dtype=int)
 
     curr_particle = 1
     missing = {}

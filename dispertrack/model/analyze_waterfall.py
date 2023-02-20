@@ -151,7 +151,7 @@ class AnalyzeWaterfall:
         else:
             to_denoise = self.waterfall
 
-        result = np.array(to_denoise, dtype=np.float)
+        result = np.array(to_denoise, dtype=float)
         for axis, _sigma in enumerate(sigma):
             if _sigma > 0:
                 correlate1d(result, gaussian_kernel(_sigma, truncate), axis, output=result, mode='constant', cval=0.0)
@@ -494,6 +494,14 @@ class AnalyzeWaterfall:
         self.contextual_data = {
             'last_export_folder': str(filename)
             }
+
+        # Remove particles where D or r is NaN:
+        # (for some reason the code at the end of calculate_particle_properties doesn't remove all particles with D=NaN)
+        false_particles = [p for p, pp in self.pcle_data.items() if pp.get('D') is np.nan or pp.get('r', np.nan) is np.nan]
+        print('failed particles detected:', false_particles)
+        for p in false_particles:
+            del self.pcle_data[p]
+
         data = {p: [pp.get('D')[0], 1E9 * 2 * pp.get('r', np.nan), pp.get('mean_intensity'), pp.get('intensity_std')]
                 for p, pp in self.pcle_data.items()}
 

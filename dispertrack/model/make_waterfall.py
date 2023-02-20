@@ -97,9 +97,10 @@ class MakeWaterfall:
             np.min(cross_section)]
         params = fitgaussian(cross_section, p0)
 
-        self.roi = np.int(params[1]-sigmas*params[2]), np.int(params[1]+sigmas*params[2])
+        self.roi = int(params[1]-sigmas*params[2]), int(params[1]+sigmas*params[2])
 
-        return np.int(params[1]-sigmas*params[2]), np.int(params[1]+sigmas*params[2])
+        return int(params[1]-sigmas*params[2]), int(params[1]+sigmas*params[2])
+        return int(params[1]-sigmas*params[2]), int(params[1]+sigmas*params[2])
 
     def calculate_movie_background(self, index=0, frames=10):
         """  Calculates the background for the movie frames using a simple method of the median on a sliding window.

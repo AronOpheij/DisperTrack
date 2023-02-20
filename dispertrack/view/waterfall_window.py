@@ -164,7 +164,7 @@ class WaterfallWindow(QMainWindow):
 
     def calculate_coupled_intensity(self):
         x = [self.hline1.value(), self.hline2.value()]
-        x = np.sort(x).astype(np.int)
+        x = np.sort(x).astype(int)
         self.analyze_model.calculate_coupled_intensity(min_pixel=x[0], max_pixel=x[1])
 
     def clear_crop(self):
@@ -173,7 +173,7 @@ class WaterfallWindow(QMainWindow):
 
     def crop_waterfall(self):
         x = [self.hline1.value(), self.hline2.value()]
-        x = np.sort(x).astype(np.int)
+        x = np.sort(x).astype(int)
         self.analyze_model.crop_waterfall(x[0], x[1])
         self.update_image(self.analyze_model.waterfall)
         self.line_start_frame.setText(str(x[0]))
