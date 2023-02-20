@@ -22,5 +22,7 @@ setup(
         'scikit-image',
         'pandas',
         'matplotlib',
+        'h5py',
+        'pyqtgraph'
         ]
     )
